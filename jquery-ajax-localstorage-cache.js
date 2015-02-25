@@ -41,8 +41,11 @@ $.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
     // parse back to JSON if we can.
     if ( options.dataType.indexOf( 'json' ) === 0 ) value = JSON.parse( value );
     options.success( value );
-    // Abort is broken on JQ 1.5 :(
-    jqXHR.abort();
+    
+    //Preload from cache and continue XHR
+    var preLoad = options.preLoad || false;
+    if(preLoad === false)
+      jqXHR.abort();  // Abort is broken on JQ 1.5 :(
   } else {
 
     //If it not in the cache, we change the success callback, just put data on localstorage and after that apply the initial callback
